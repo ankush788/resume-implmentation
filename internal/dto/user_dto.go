@@ -1,4 +1,5 @@
 package dto
+
 // package dto is exactly where you define your request/response structures that move between layers.
 //DTO = Data Transfer Object
 

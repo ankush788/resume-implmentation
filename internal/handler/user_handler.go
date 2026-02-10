@@ -1,12 +1,13 @@
 package handler
 
 import (
-	"net/http"
 	"go-user-service/internal/dto"
 	appErrors "go-user-service/internal/errors"
 	"go-user-service/internal/middleware"
 	"go-user-service/internal/service"
 	"go-user-service/internal/validators"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 )
 
