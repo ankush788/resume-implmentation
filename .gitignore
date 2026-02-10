@@ -1,0 +1,58 @@
+# =========================
+# Go Build Artifacts
+# =========================
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.cover
+*.coverprofile
+*.prof
+*.log
+
+# Binary output folders
+bin/
+dist/
+build/
+
+# Go workspace file
+go.work
+
+# Dependency directories (optional - ignore if not committing vendor)
+vendor/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Coverage Reports
+# =========================
+coverage.out
+coverage.html
+
+# =========================
+# Temporary Files
+# =========================
+tmp/
