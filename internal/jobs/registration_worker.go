@@ -32,19 +32,19 @@ func NewRegistrationWorker(
 	}
 }
 
-// Start begins processing messages from Kafka (runs in background goroutine)
+// Start processing messages from Kafka ( background job)
 func (w *RegistrationWorker) Start(ctx context.Context) {
 	go func() {
 		log.Println("Starting registration worker...")
 		for {
-			select {
+			select {   //select is used only with channels. Whichever channel is ready first, run that case.
 			case <-w.stopCh:
 				log.Println("Stopping registration worker...")
 				return
 			default:
 				// Read message from Kafka with timeout
 				readCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
-				req, err := w.consumer.ReadMessage(readCtx)
+				req, err := w.consumer.ReadMessage(readCtx)  // reading message from kafka 
 				cancel()
 
 				if err != nil {
@@ -88,5 +88,5 @@ func (w *RegistrationWorker) processRegistration(ctx context.Context, req *messa
 
 // Stop gracefully stops the worker
 func (w *RegistrationWorker) Stop() {
-	close(w.stopCh)
+	close(w.stopCh) //from here signal generate goes to start and background job stop
 }

@@ -28,7 +28,7 @@ func main() {
 	// it will not delete or modify existing fields to prevent data loss (it throw error).
 	database.AutoMigrate(&models.User{})
 
-	// Initialize Redis cache (best-effort)
+
 	rc := cache.NewRedisCache(cfg.RedisAddr, cfg.RedisPassword, cfg.RedisDB)
 
 	
@@ -41,12 +41,11 @@ func main() {
 	repo := repository.NewUserRepo(database, rc)
 	userService := service.NewUserService(repo)
 
-	// Set Kafka producer and Redis cache dependencies on service
-	userService.SetDependencies(kafkaProducer, rc)
+	userService.SetDependencies(kafkaProducer, rc) // Set Kafka producer and Redis cache dependencies on service
 
-	// Start registration worker (processes messages from Kafka)
-	worker := jobs.NewRegistrationWorker(kafkaConsumer, userService, rc)
-	worker.Start(context.Background())
+	
+	worker := jobs.NewRegistrationWorker(kafkaConsumer, userService, rc) // Start registration worker (processes messages from Kafka)
+	worker.Start(context.Background()) // 
 	log.Println("Registration worker started")
 
 	handler := handler.NewUserHandler(userService)
