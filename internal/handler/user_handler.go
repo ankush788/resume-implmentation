@@ -11,6 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// method of go --> use anywhere
+//Marshal -->  convert struct to JSON
+// UnMarshal --> convert Json to struct
+
+// ShouldBindJSON/Query  is a method of --> gin.Context only use in Handler layer
+//ShouldBindJson --> JSON to struct
+//ShouldBindQuery --> parm to struct
 type UserHandler struct {
 	service *service.UserService
 }
@@ -36,7 +43,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 	}
 
 	// Register user through service
-	if err := h.service.Register(req.Username, req.Password); err != nil {
+	if err := h.service.Register(c.Request.Context(), req.Username, req.Password); err != nil {
 		middleware.RespondWithError(c, err)
 		return
 	}
@@ -64,7 +71,7 @@ func (h *UserHandler) Login(c *gin.Context) {
 	}
 
 	// Perform login through service
-	if err := h.service.Login(req.Username, req.Password); err != nil {
+	if err := h.service.Login(c.Request.Context(), req.Username, req.Password); err != nil {
 		middleware.RespondWithError(c, err)
 		return
 	}
@@ -92,7 +99,7 @@ func (h *UserHandler) RegisterAsync(c *gin.Context) {
 	}
 
 	// Start async registration
-	taskID, err := h.service.StartRegisterAsync(req.Username, req.Password)
+	taskID, err := h.service.StartRegisterAsync(c.Request.Context(), req.Username, req.Password)
 	if err != nil {
 		middleware.RespondWithError(c, err)
 		return
@@ -112,7 +119,7 @@ func (h *UserHandler) TaskStatus(c *gin.Context) {
 		return
 	}
 
-	status := h.service.GetTaskStatus(taskID)
+	status := h.service.GetTaskStatus(c.Request.Context(), taskID)
 	if status == "not_found" {
 		middleware.RespondWithError(c, appErrors.ErrTaskNotFound)
 		return

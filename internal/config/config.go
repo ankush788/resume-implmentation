@@ -9,10 +9,11 @@ import (
 )
 
 type Config struct {
-	DBUrl string
-	RedisAddr     string
-	RedisPassword string
-	RedisDB       int
+	DBUrl          string
+	RedisAddr      string
+	RedisPassword  string
+	RedisDB        int
+	KafkaBrokerAddress    string
 }
 
 func Load() *Config {
@@ -46,11 +47,17 @@ func Load() *Config {
     }
 	}
 
+	KafkaBrokerAddress := os.Getenv("KAFKA_BROKER")
+	if KafkaBrokerAddress == "" {
+		KafkaBrokerAddress = "127.0.0.1:9092"
+	}
+
 return &Config{
-    DBUrl:        dbUrl,
+    DBUrl:         dbUrl,
     RedisAddr:     redisAddr,
     RedisPassword: redisPassword,
     RedisDB:       redisDB,
+    KafkaBrokerAddress:   KafkaBrokerAddress,
 }
 
 }

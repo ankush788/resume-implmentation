@@ -19,7 +19,7 @@ func NewUserRepo(db *gorm.DB, rc *cache.RedisCache) *UserRepository {
 	return &UserRepository{db: db, cache: rc}
 }
 
-func (r *UserRepository) Create(user *models.User) error {
+func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 	if err := r.db.Create(user).Error; err != nil {
 		return err
 	}
@@ -27,15 +27,13 @@ func (r *UserRepository) Create(user *models.User) error {
 	// set cache (best-effort)
 	if r.cache != nil {
 		// ignore cache errors; DB write is source of truth
-		_ = r.cache.SetUser(context.Background(), user, 24*time.Hour)
+		_ = r.cache.SetUser(ctx, user, 24*time.Hour)
 	}
 
 	return nil
 }
 
-func (r *UserRepository) FindByUsername(username string) (*models.User, error) {
-	ctx := context.Background()
-
+func (r *UserRepository) FindByUsername(ctx context.Context, username string) (*models.User, error) {
 	// Try cache first
 	if r.cache != nil {
 		if u, err := r.cache.GetUser(ctx, username); err == nil && u != nil {

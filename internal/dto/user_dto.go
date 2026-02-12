@@ -6,10 +6,10 @@ package dto
 
 
 // only required is required other are optional (during binding )
+// struct me kya kab use hota hai 
 // json --> request body
 // form --> Query params , URL form data (x-www-form-urlencoded)
 // Path param (/users/:id)  --> uri
-
 
 //default : Sets a value if the field is NOT provided.
 //omitempty : Skips validation if field is empty.

@@ -58,3 +58,18 @@ func (r *RedisCache) DeleteUser(ctx context.Context, username string) error {
     key := "user:" + username
     return r.Client.Del(ctx, key).Err()
 }
+// SetTaskStatus stores the status of an async task in Redis
+func (r *RedisCache) SetTaskStatus(ctx context.Context, taskID, status string, ttl time.Duration) error {
+    key := "task:" + taskID
+    return r.Client.Set(ctx, key, status, ttl).Err()
+}
+
+// GetTaskStatus retrieves the status of an async task from Redis
+func (r *RedisCache) GetTaskStatus(ctx context.Context, taskID string) (string, error) {
+    key := "task:" + taskID
+    status, err := r.Client.Get(ctx, key).Result()
+    if err == redis.Nil {
+        return "", redis.Nil
+    }
+    return status, err
+}
